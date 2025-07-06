@@ -8,8 +8,8 @@ on:
 
 env:
   IMAGE_NAME: workprofile-app
-  REGISTRY_USER: NAAMAS11           # השם שלך בגיטהאב
-  REGISTRY: ghcr.io                 # הרגיסטרי של GitHub
+  REGISTRY_USER: naamas11             # אותיות קטנות בלבד
+  REGISTRY: ghcr.io                   # רגיסטרי של GitHub
 
 jobs:
   build-test:
