@@ -8,8 +8,8 @@ on:
 
 env:
   IMAGE_NAME: workprofile-app
-  REGISTRY_USER: naamas11             # אותיות קטנות בלבד
-  REGISTRY: ghcr.io                   # רגיסטרי של GitHub
+  REGISTRY_USER: naamas11
+  REGISTRY: ghcr.io
 
 jobs:
   build-test:
@@ -55,12 +55,11 @@ jobs:
     - name: Log in to GitHub Container Registry (GHCR)
       run: echo "${{ secrets.NAAMAS112 }}" | docker login ${{ env.REGISTRY }} -u ${{ env.REGISTRY_USER }} --password-stdin
 
-    - name: Build image with tags
-      run: |
-        docker build -t ${{ env.REGISTRY }}/${{ env.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:latest \
-                     -t ${{ env.REGISTRY }}/${{ env.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.sha_tag }} .
-
-    - name: Push image to GHCR
-      run: |
-        docker push ${{ env.REGISTRY }}/${{ env.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:latest
-        docker push ${{ env.REGISTRY }}/${{ env.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.sha_tag }}
+    - name: Build and Push image to GHCR
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: |
+          ghcr.io/${{ env.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:latest
+          ghcr.io/${{ env.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.sha_tag }}
